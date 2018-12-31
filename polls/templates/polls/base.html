@@ -1,0 +1,17 @@
+{% load static %}
+<html>
+<head>
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+    <img src="{% static 'images/sitelogo.png' %}" alt="Logo">
+    <div>
+        <form action="./" method='GET'>
+            <input id='query' type='text' name='q' size='50' value="" />
+            <input type="submit" value="搜一下">
+        </form>
+    </div>
+    {% block main_content %}{% endblock %}
+    {% block extra_script %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,16 @@
+{% load static %}
+<html>
+<head>
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+    <img src="{% static 'images/sitelogo.png' %}" alt="Logo">
+    <form action="{% url %}" method='GET'>
+    	<label for='query'>关键词</label>
+    	<input id='query' type='text' name='q' size='50' value="输入药品名称或企业名称等" />
+    	<input type="submit" value="搜一下">
+    </form>
+    {% block main_content %}{% endblock %}
+    {% block extra_script %}{% endblock %}
+</body>
+</html>
