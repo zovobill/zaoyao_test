@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load echarts %}
+
+{% block main_content %}    
+    {% include 'drugs/search.html' %}
+    {% include 'drugs/filter.html' %}
+    <div class="row row-offcanvas row-offcanvas-right">        
+        <!--/.sidebar-offcanvas-->
+        {% for chart in echarts_instance %}
+        <div class="col-xs-12 col-sm-10">            
+            {# 渲染容器 #}            
+            {% echarts_container chart %}
+        </div>
+        {% endfor%}
+    </div>
+{% endblock %}
+
+{% block extra_script %}
+    {% for chart in echarts_instance %}
+        {# 渲染依赖文件 #}
+        {% echarts_js_dependencies chart %}
+        {# 渲染初始化文本 #}
+        {% echarts_js_content chart %}
+    {% endfor%}
+{% endblock %}

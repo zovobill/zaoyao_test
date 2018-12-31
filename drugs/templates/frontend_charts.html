@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+
+{% block main_content %}
+    
+    <div class="row row-offcanvas row-offcanvas-right">
+        <div class="col-xs-6 col-sm-2 sidebar-offcanvas" id="sidebar">
+            <div class="list-group">
+                
+            </div>
+        </div>
+        {% include 'drugs/search.html' %}
+        <!--/.sidebar-offcanvas-->
+        <div class="col-xs-12 col-sm-10 col-md-offset-1" >
+
+            <div class="alert alert-info" role="alert">
+                {% include 'drugs/join.html' %}
+            </div>
+            <ul class="nav nav-tabs nav-justified">
+                <li id="list_li" role="presentation" class="active"><a href="javascript:">列表</a></li>
+                <li id="chart_li" role="presentation" class=""><a href="javascript:">图表</a></li>
+            </ul>
+            <div id="drugs_list">
+                {% include 'drugs/drugs_list.html' %}
+            </div>
+            <div id="echarts_group" style="display: none;">
+                <div id="id_echarts_one" style="height: 400px;margin: 10px;"></div>
+                <div id="id_echarts_two" style="height: 400px;margin: 10px;"></div>
+            </div>
+        </div>
+        <!--/.col-xs-12.col-sm-9-->
+    </div>
+{% endblock %}
+
+
+{% block extra_script %}
+    <script src="https://cdn.bootcss.com/echarts/3.8.5/echarts.min.js"></script>
+    <script src="http://echarts.baidu.com/asset/map/js/china.js"></script>
+    <script type="text/javascript">
+        var qcols={};
+        var list_is_changed, chart_is_changed;
+        var isFirst = true;
+        $('#list_li').click(function(){
+            $('#chart_li').removeClass('active');
+            $(this).addClass('active');
+            $('#echarts_group').hide();
+            $('#drugs_list').show();      
+            if(list_is_changed){
+                loadDrugsList(qcols,1);
+            }            
+        });
+
+        $('#chart_li').click(function(){
+            $('#list_li').removeClass('active');
+            $(this).addClass('active');
+            $('#drugs_list').hide();
+            $('#echarts_group').show();
+            if(Object.keys(qcols).length == 0){
+                $("#checkall").click();
+                loadEcharts(qcols);
+            }else if(chart_is_changed){
+                loadEcharts(qcols);
+            }
+        });
+
+        $("#checkall").click(function(){
+            if($(this).prop("checked")){
+                $("ul.nav-pills li").each(function(){
+                    $(this).addClass("active");
+                    qcols[$(this).data('q')] = $(this).data('col');
+                });
+            }else{
+                $("ul.nav-pills li").each(function(){
+                    $(this).removeClass("active");
+                    delete qcols[$(this).data('q')];
+                });                
+            }
+            $("#checkednum").text(Object.keys(qcols).length);
+            list_is_changed=true;
+            chart_is_changed=true;
+        });
+
+        $("ul.nav-pills li").each(function(){
+            $(this).click(function(){
+                $(this).toggleClass("active");
+                if($(this).hasClass("active")){
+                    qcols[$(this).data('q')] = $(this).data('col');                
+                }else{
+                    delete qcols[$(this).data('q')];
+                }
+                $("#checkednum").text(Object.keys(qcols).length);
+                list_is_changed=true;
+                chart_is_changed=true;
+            });
+        });
+
+        var mChart, mChart2;
+        function loadEcharts(qcols) {
+            
+            var url = '/drugs/options/';
+            if (mChart != null) {
+                mChart.clear();
+            }
+            mChart = echarts.init(document.getElementById("id_echarts_one"));
+            mChart.showLoading(opts={text:"加载中"});
+            if (mChart2 != null) {
+                mChart2.clear();
+            }
+            mChart2 = echarts.init(document.getElementById("id_echarts_two"));
+            mChart2.showLoading();
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: qcols,
+                dataType: "json",
+            }).done(function (data) {
+                // data = JSON.parse(data);
+                mChart.hideLoading();
+                mChart.setOption(data[1]);
+                mChart2.hideLoading();
+                mChart2.setOption(data[2]);
+                console.log(data);
+                
+            });
+            chart_is_changed=false;
+        }
+
+        function loadpage(qcols, page){
+            if(Object.keys(qcols).length == 0 && page > 1){
+                $("#checkall").click();
+            }
+            loadDrugsList(qcols, page);
+        }
+        function loadDrugsList(qcols, page){
+            $.ajax({
+                url: '/drugs/list/'+page+'/',
+                type: "POST",
+                data: qcols,
+                dataType: "json",
+            }).done(function(data){
+                // need to parseJSON() before use it
+                // var d = '[{"name":"cxh","sex":"man"},{"name":"cxh1","sex":"man1"}]';
+                // var drugs = $.parseJSON(data);                            
+                // $.each(drugs, function(i, drug){
+                //     $('#drugs_list').append('<li>',drug.fields.drug_approval_num,'</li>');
+                // }); 
+                $('#drugs_list').empty();
+                // data.content need decode() for json to response
+                // $('#drugs_list').append(data.content);
+
+                $('#drugs_list').append(data.drugs);
+                
+            });
+            // list_is_changed=false;
+        }
+
+
+        $(document).ready(function () {
+            $('button.btn.btn-primary.postajax').each(function () {
+                $(this).click(function(){
+                if(Object.keys(qcols).length > 0){     
+                    if($("#list_li").hasClass("active")){
+                        loadDrugsList(qcols, 1);
+                        list_is_changed=false;
+                    }
+                    if($("#chart_li").hasClass("active")){
+                        loadEcharts(qcols);
+                    }                          
+                }
+                });
+            });            
+        });
+    </script>
+{% endblock %}

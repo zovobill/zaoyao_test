@@ -1,0 +1,31 @@
+
+<div id='filter'>
+	{% for qword, qvalue in querys.items %}
+	<div class="row">
+		<div class="col-sm-8">
+		<button class="btn btn-primary" type="button">
+  			关键词：{{ qword }}<span class="badge">{{qvalue.kwords|length}}</span>
+		</button>
+		</div>
+		{% if forloop.counter == 1 %}
+		<div class="col-sm-4">
+		    <div class="input-group pull-right" style="min-width: 200px;">
+	        	<span id="id_toggle_choice" style="margin: 0px 10px;">
+		      		<input id="checkall" type="checkbox" aria-label="全选"/><label style="margin: 0px 10px">全选</label></input>
+		      		<button type="button" class="btn btn-primary postajax">确定<span id="checkednum" class="badge">0</span></button>
+	      		</span>
+	    	</div><!-- /input-group -->
+  		</div><!-- /.col-lg-6 -->
+  		{% endif%}
+  	</div>
+	<div class="pre-scrollable" style="overflow: auto !important;max-height: 170px;">
+		<ul class="nav nav-pills" role="tablist" style="margin: 5px">			
+			{% for q in qvalue.kwords %}
+        		<li role="presentation" class="{{qvalue.active}}" data-q="{{q}}" data-col="{{ qvalue.column }}" 
+        		style="padding:0px 0px ;margin: 2px">
+        			<a href="javascript:"><small>{{q}}</small></a></li>
+        	{% endfor %}
+        </ul>
+	</div>
+	{% endfor %}
+</div>	

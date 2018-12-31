@@ -1,0 +1,17 @@
+<div>
+<!--li> <a href="/drugs/?q={{q.name}}"> {{q.name}} </a></li-->
+	<ul>
+	<!--
+		{% for q in querys %}
+        	<button onclick="window.location.href='/drugs/?q={{q.name}}'" type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">{{q.name}}</button>
+		{% endfor %}
+	-->
+
+		{% for qword, rword in querys.items %}
+			<p>关键词：{{ qword }}</p>
+			{% for q in rword.keys %}
+        		<button onclick="window.location.href='/drugs/?q={{q}}'" type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">{{q}}</button>
+        	{% endfor %}
+ 	<!--li> <a href="/drugs/?q={{q.name}}"> {{q.name}} </a></li-->
+		{% endfor %}
+	</ul>

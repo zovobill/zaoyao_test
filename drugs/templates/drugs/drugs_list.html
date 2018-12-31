@@ -1,0 +1,43 @@
+<div>    
+    <table class="table">
+      <thead>
+        <tr>
+          <th>序号</th>
+          <th>批准文号</th>
+          <th>药品名称</th>
+          <th>规格</th>
+          <th>生产企业</th>
+          <th>批准日期</th>
+        </tr>
+      </thead>
+      <tbody>
+      	{% for drug in drugs_list_page %}
+        <tr class="{%cycle 'success' ''%}">
+          <th scope="row">{{ forloop.counter0|add:drugs_list_page.start_index }}</th>
+          <td>{{ drug.drug_approval_num }}</td>
+          <td>{{ drug.drug_name_zh }}</td>
+          <td>{{ drug.drug_spec}}</td>
+          <td>{{ drug.production_unit__production_unit_name}}</td>
+          <td>{{ drug.approval_date|date:'Y-m-d'}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+</div>
+<div class="pagination">
+    <span class="step-links">
+        {% if drugs_list_page.has_previous %}
+            <a href="javascript:loadpage(qcols, 1)">&laquo; 首页</a>
+            <a href="javascript:loadpage(qcols, {{ drugs_list_page.previous_page_number }})">上一页</a>
+        {% endif %}
+
+        <span class="current">
+            第<code>{{ drugs_list_page.number }}</code>页，共<code>{{ drugs_list_page.paginator.num_pages }}</code>页
+        </span>
+
+        {% if drugs_list_page.has_next %}
+            <a href="javascript:loadpage(qcols, {{ drugs_list_page.next_page_number }})">下一页</a>
+            <a href="javascript:loadpage(qcols, {{ drugs_list_page.paginator.num_pages }})">末页 &raquo;</a>
+        {% endif %}
+    </span>
+</div>
