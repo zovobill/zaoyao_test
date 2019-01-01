@@ -1,4 +1,4 @@
-import pymysql
+import pymysql, json
 from pyecharts import Bar
 from django_echarts.views.frontend import EChartsFrontView
 from django_echarts.datasets.charts import NamedCharts
@@ -45,6 +45,20 @@ class FrontEChartsTemplate(EChartsFrontView):
             charts[i] = bar
             i += 1
         return charts
+
+    def post(self, request, **kwargs):
+        echarts = self.get_echarts_instance(**kwargs)
+        datas = {}
+        # print('echarts keys:', echarts.keys())
+        for name, chart in echarts.items():
+            datas[name] = json.dumps(chart.options)
+            
+            # print(name, chart.options['legend'])
+            # print('*'*100)
+        return JsonResponse(data=datas, safe=False)
+
+    # def post(self, request, **kwargs):
+    #     return self.get(request, **kwargs)
 
 class DrugsList(ListView):
     """docstring for DrugsListView"""

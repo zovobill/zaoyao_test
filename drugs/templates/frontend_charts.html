@@ -115,9 +115,9 @@
             }).done(function (data) {
                 // data = JSON.parse(data);
                 mChart.hideLoading();
-                mChart.setOption(data[1]);
+                mChart.setOption($.parseJSON(data[1]));
                 mChart2.hideLoading();
-                mChart2.setOption(data[2]);
+                mChart2.setOption($.parseJSON(data[2]));
                 console.log(data);
                 
             });
