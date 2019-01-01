@@ -1,5 +1,6 @@
 import pymysql, json
 from pyecharts import Bar
+from pyecharts_javascripthon.api import TRANSLATOR
 from django_echarts.views.frontend import EChartsFrontView
 from django_echarts.datasets.charts import NamedCharts
 from django.http import HttpResponse, JsonResponse
@@ -51,7 +52,8 @@ class FrontEChartsTemplate(EChartsFrontView):
         datas = {}
         # print('echarts keys:', echarts.keys())
         for name, chart in echarts.items():
-            datas[name] = json.dumps(chart.options)
+
+            datas[name] = TRANSLATOR.translate(chart.options).as_snippet()
             
             # print(name, chart.options['legend'])
             # print('*'*100)

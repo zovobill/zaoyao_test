@@ -25,7 +25,7 @@ SECRET_KEY = 'trpg_(%p!msr$xvdb-*cl^2m@&bao_2%*d7xn39@la-r7z9+-3'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -92,6 +92,8 @@ DATABASES = {
         'NAME': 'cfda_drugs',
         'USER': 'root',
         'PASSWORD': 'root',
+        'HOST':'127.0.0.1',
+        'PORT':'3306',
         # 'OPTIONS': {
         #     'read_default_file':'/mysql.cnf',
         # },
