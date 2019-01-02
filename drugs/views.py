@@ -112,7 +112,7 @@ def drugslist(request, page):
     print('request.POST:', request.POST)
     qcols= request.POST
     if len(qcols) == 0:
-        qset = DrugDataset.default_queryset
+        qset = DrugDataset.default_queryset.order_by('-approval_date').values(*ddset.view_colnames)
     else:
         qcols = {k:''.join(v) for k,v in qcols.items()}
         print("qcols IN DrugsList:", qcols)
