@@ -111,9 +111,12 @@ def fronthome(request):
 def drugslist(request, page):
     print('request.POST:', request.POST)
     qcols= request.POST
-    qcols = {k:''.join(v) for k,v in qcols.items()}
-    print("qcols IN DrugsList:", qcols)
-    qset = ddset.get_queryset_by_dict(**qcols).order_by('-approval_date').values(*ddset.view_colnames)
+    if len(qcols) == 0:
+        qset = DrugDataset.default_queryset
+    else:
+        qcols = {k:''.join(v) for k,v in qcols.items()}
+        print("qcols IN DrugsList:", qcols)
+        qset = ddset.get_queryset_by_dict(**qcols).order_by('-approval_date').values(*ddset.view_colnames)
     # print('qset: ', qset)
     paginator = Paginator(qset, 20)
     qset_page = paginator.get_page(page)

@@ -12,7 +12,7 @@ class DrugDataset(object):
 	one_ending = '_one'
 	many_ending = '_many'
 	charts_by_column = {
-	'default'+one_ending:['approval_date'],
+	'default':['approval_date', 'production_unit__province'],
 	'drug_name_zh'+one_ending:['approval_date', 'production_unit__province'],
 	'drug_name_zh'+many_ending:['approval_date', 'production_unit__province', 'drug_form'],
 	# 'drug_name_zh'+one_ending:['drug_spec', 'production_unit__production_unit_name', 'approval_date'],
@@ -37,10 +37,8 @@ class DrugDataset(object):
 	is_by_and = True
 	default_queryset = None
 
-	# ds_model = DrugDatasetModel
 	model = DrugsApproved
 	querys_dict = {}
-	qmode_is_compare = False
 
 	def __init__(self):
 		super(DrugDataset, self).__init__()
@@ -186,14 +184,20 @@ class DrugDataset(object):
 
 	def get_datasets_by_dict(self, **keys_cols):
 		# get datasets by dict, to ready for request ajax
-		kwords = list(keys_cols.keys())
-		columns = list(keys_cols.values())
-		qset = self._get_queryset_by_list(self.model.objects, kwords, columns, by_and = False)
-
-		if len(columns) > 1:
-			chartbycols = self.charts_by_column[columns[0]+self.many_ending]
+		if len(keys_cols) == 0:
+			qset = DrugDataset.default_queryset
+			chartbycols = self.charts_by_column['default']
+			kwords = []
+			columns = []
 		else:
-			chartbycols = self.charts_by_column[columns[0]+self.one_ending]	
+			kwords = list(keys_cols.keys())
+			columns = list(keys_cols.values())
+			qset = self._get_queryset_by_list(self.model.objects, kwords, columns, by_and = False)
+
+			if len(columns) > 1:
+				chartbycols = self.charts_by_column[columns[0]+self.many_ending]
+			else:
+				chartbycols = self.charts_by_column[columns[0]+self.one_ending]	
 		chartdatas = {}
 
 		# get every chart by specified columns
@@ -204,10 +208,14 @@ class DrugDataset(object):
 			zdataset, new_col = self._init_dataset(qset, chartbycol)
 
 			# count the item data of chartbycol filted by each filter_col and key
-			for key, filter_col in keys_cols.items():
-				print('*'*100)
-				data = self._get_data_count_by(key, filter_col, chartbycol, qset, zdataset, new_col)
-				chartdata[key] = data
+			if len(keys_cols) == 0:
+				data = self._get_data_count_by(chartbycol, qset, zdataset, new_col)
+				chartdata['Catgory with All Results'] = data
+			else:
+				for key, filter_col in keys_cols.items():
+					print('*'*100)
+					data = self._get_data_count_by(chartbycol, qset, zdataset, new_col, filter_by_col = filter_col, filter_keyword = key)
+					chartdata[key] = data
 			chartdatas[self.chartbyids[chartbycol]] = chartdata
 			# self._save_dataset_to_db(qset, '', datasets)
 		return chartdatas, kwords, columns
@@ -220,13 +228,14 @@ class DrugDataset(object):
 		qset, qwords, columns = self.get_queryset(keyword, is_exact)
 		print('qset type:{}'.format(type(qset)))
 		if len(qset) == 0: return {}, keyword, []
-		self.default_queryset = qset
+		DrugDataset.default_queryset = qset
 		querys_dict, cur_words = self._get_query_names_by_cols(qset, qwords, columns)
 		return querys_dict, cur_words, qset
 
-	def _get_data_count_by(self, keyword, filter_by_col, count_by_col, qset, zdataset, new_col):
+	def _get_data_count_by(self, count_by_col, qset, zdataset, new_col, filter_by_col = None, filter_keyword = None ):
 		# count a column by group by itself
-		qset = qset.filter(**{filter_by_col+'__iexact': keyword})
+		if filter_by_col:
+			qset = qset.filter(**{filter_by_col+'__iexact': filter_keyword})
 		if count_by_col in self.date_columns:
 			# print('-----------annotate date by year-------------')
 			qset = qset.annotate(**{new_col : ExtractYear(count_by_col)}).values(new_col)

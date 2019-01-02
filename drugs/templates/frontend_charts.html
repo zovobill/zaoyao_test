@@ -55,7 +55,7 @@
             $('#drugs_list').hide();
             $('#echarts_group').show();
             if(Object.keys(qcols).length == 0){
-                $("#checkall").click();
+                // $("#checkall").click();
                 loadEcharts(qcols);
             }else if(chart_is_changed){
                 loadEcharts(qcols);
@@ -125,9 +125,9 @@
         }
 
         function loadpage(qcols, page){
-            if(Object.keys(qcols).length == 0 && page > 1){
-                $("#checkall").click();
-            }
+            // if(Object.keys(qcols).length == 0 && page > 1){
+            //     $("#checkall").click();
+            // }
             loadDrugsList(qcols, page);
         }
         function loadDrugsList(qcols, page){

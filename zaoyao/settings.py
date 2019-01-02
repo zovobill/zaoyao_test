@@ -25,7 +25,7 @@ SECRET_KEY = 'trpg_(%p!msr$xvdb-*cl^2m@&bao_2%*d7xn39@la-r7z9+-3'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -47,7 +47,7 @@ DJANGO_ECHARTS = {
         'renderer': 'canvas',
         'lib_js_host':'bootcdn',
         'map_js_host':'echarts',
-        'local_host':None
+        'local_host':None,
 }
 
 MIDDLEWARE = [
@@ -92,16 +92,37 @@ DATABASES = {
         'NAME': 'cfda_drugs',
         'USER': 'root',
         'PASSWORD': 'root',
-        'HOST':'127.0.0.1',
-        'PORT':'3306',
         # 'OPTIONS': {
         #     'read_default_file':'/mysql.cnf',
         # },
         
-    }
+    },
 }
 
 
+# logging config
+LOGGING = {
+    'version':1,
+    'disable_existing_loggers' : False,
+    'handlers': {
+        'console':{
+            'level' : 'INFO',
+            'class' : 'logging.StreamHandler',
+        },
+        'file' : {
+            'level' : 'WARNING',
+            'class' : 'logging.FileHandler',
+            'filename': 'log/zaoyao.log',
+        },
+    },
+    'loggers' : {
+        'django':{
+            'handlers' : ['file', 'console'],
+            'level' : 'WARNING',
+            'propagate' : True,
+        },
+    },
+}
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
 
@@ -144,5 +165,5 @@ CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
         'LOCATION': '127.0.0.1:11211',
-    }
+    },
 }
