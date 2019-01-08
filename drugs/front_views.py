@@ -22,9 +22,9 @@ class FrontEChartsTemplate(EChartsFrontView):
         logger.debug('kwargs: {}'.format(kwargs))
 
         qcols= self.request.POST
-        
-        if qcols == {}:
-            chartdatas, qwords, columns = ddset.get_datasets_by_dict(**qcols)
+        keyword = qcols.get('cur_keyword', '')
+        if '' != keyword:
+            chartdatas, qwords, columns = ddset.get_datasets_by_dict(cur_keyword = keyword)
         else:
             qcols = {k:''.join(v) for k,v in qcols.items()}
             logger.debug("qcols:", qcols)            

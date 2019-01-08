@@ -35,7 +35,7 @@ class DrugDataset(object):
 	x = 'axisX'
 	y = 'axisY'
 	is_by_and = True
-	default_queryset = None
+	default_qsets = {}
 
 	model = DrugsApproved
 	querys_dict = {}
@@ -161,10 +161,12 @@ class DrugDataset(object):
 
 	def get_queryset(self, keyword, is_exact = False):
 		# get queryset by keyword
+		self.keyword = keyword
 		kwords = self._parse_keyword(keyword)
 		if kwords == []: return [], kwords, []
 		qwords, columns = self._get_query_columns(kwords)
 		if qwords == []: return [], kwords, []
+
 		kn = len(qwords)
 		if kn == 1:
 			qset = self._get_queryset_by_one(self.model.objects, qwords[0], columns[0], is_exact = is_exact)
@@ -182,10 +184,10 @@ class DrugDataset(object):
 		print('qset by dict len:', len(qset))
 		return qset
 
-	def get_datasets_by_dict(self, **keys_cols):
+	def get_datasets_by_dict(self, cur_keyword = '', **keys_cols):
 		# get datasets by dict, to ready for request ajax
-		if len(keys_cols) == 0:
-			qset = DrugDataset.default_queryset
+		if cur_keyword != '':
+			qset = DrugDataset.default_qsets[cur_keyword]
 			chartbycols = self.charts_by_column['default']
 			kwords = []
 			columns = []
@@ -228,7 +230,7 @@ class DrugDataset(object):
 		qset, qwords, columns = self.get_queryset(keyword, is_exact)
 		print('qset type:{}'.format(type(qset)))
 		if len(qset) == 0: return {}, keyword, []
-		DrugDataset.default_queryset = qset
+		DrugDataset.default_qsets[self.keyword] = qset
 		querys_dict, cur_words = self._get_query_names_by_cols(qset, qwords, columns)
 		return querys_dict, cur_words, qset
 

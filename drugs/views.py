@@ -91,7 +91,7 @@ def fronthome(request):
     qset = qset.order_by('-approval_date').values(*ddset.view_colnames)
     paginator = Paginator(qset, 20)
     qset_page = paginator.get_page(1)
-    datasets={'querys':querys, 'q':cur_word, 'drugs_list_page':qset_page}
+    datasets={'querys':querys, 'q':keyword, 'drugs_list_page':qset_page}
     return render_to_response('frontend_charts.html', datasets)
 
 # def drugslist(request):
@@ -112,7 +112,10 @@ def drugslist(request, page):
     print('request.POST:', request.POST)
     qcols= request.POST
     if len(qcols) == 0:
-        qset = DrugDataset.default_queryset
+        return JsonResponse(data={}, safe=False)
+    keyword = qcols.get('cur_keyword', '')
+    if '' != keyword:
+        qset = DrugDataset.default_qsets[keyword].order_by('-approval_date').values(*ddset.view_colnames)
     else:
         qcols = {k:''.join(v) for k,v in qcols.items()}
         print("qcols IN DrugsList:", qcols)

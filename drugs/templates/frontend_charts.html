@@ -37,15 +37,14 @@
     <script src="http://echarts.baidu.com/asset/map/js/china.js"></script>
     <script type="text/javascript">
         var qcols={};
-        var list_is_changed, chart_is_changed;
-        var isFirst = true;
+        var list_is_changed=true, chart_is_changed=true;
         $('#list_li').click(function(){
             $('#chart_li').removeClass('active');
             $(this).addClass('active');
             $('#echarts_group').hide();
             $('#drugs_list').show();      
             if(list_is_changed){
-                loadDrugsList(qcols,1);
+                loadpage(qcols,1);
             }            
         });
 
@@ -54,11 +53,8 @@
             $(this).addClass('active');
             $('#drugs_list').hide();
             $('#echarts_group').show();
-            if(Object.keys(qcols).length == 0){
-                // $("#checkall").click();
-                loadEcharts(qcols);
-            }else if(chart_is_changed){
-                loadEcharts(qcols);
+            if(chart_is_changed){
+                loadcharts(qcols);
             }
         });
 
@@ -94,6 +90,15 @@
         });
 
         var mChart, mChart2;
+        function loadcharts(qcols){
+            if(Object.keys(qcols).length == 0){
+                // $("#checkall").click();
+                loadEcharts({'cur_keyword':$('#qid').data('q')});
+            }else{
+                loadEcharts(qcols);
+            }
+            chart_is_changed = false;
+        }
         function loadEcharts(qcols) {
             
             var url = '/drugs/options/';
@@ -125,10 +130,13 @@
         }
 
         function loadpage(qcols, page){
-            // if(Object.keys(qcols).length == 0 && page > 1){
-            //     $("#checkall").click();
-            // }
-            loadDrugsList(qcols, page);
+            if(Object.keys(qcols).length == 0){
+                // $("#checkall").click();
+                loadDrugsList({'cur_keyword':$('#qid').data('q')}, page);
+            }else{
+                loadDrugsList(qcols, page);
+            }
+            list_is_changed = false;
         }
         function loadDrugsList(qcols, page){
             $.ajax({
@@ -157,15 +165,18 @@
         $(document).ready(function () {
             $('button.btn.btn-primary.postajax').each(function () {
                 $(this).click(function(){
-                if(Object.keys(qcols).length > 0){     
-                    if($("#list_li").hasClass("active")){
-                        loadDrugsList(qcols, 1);
-                        list_is_changed=false;
+                    if(Object.keys(qcols).length > 0){     
+                        if($("#list_li").hasClass("active")){
+                            if(list_is_changed){
+                                loadpage(qcols, 1);
+                            }
+                        }
+                        if($("#chart_li").hasClass("active")){
+                            if(chart_is_changed){
+                                loadcharts(qcols);                            
+                            }
+                        }                          
                     }
-                    if($("#chart_li").hasClass("active")){
-                        loadEcharts(qcols);
-                    }                          
-                }
                 });
             });            
         });
