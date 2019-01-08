@@ -112,10 +112,14 @@ def drugslist(request, page):
     print('request.POST:', request.POST)
     qcols= request.POST
     if len(qcols) == 0:
+<<<<<<< HEAD
         return JsonResponse(data={}, safe=False)
     keyword = qcols.get('cur_keyword', '')
     if '' != keyword:
         qset = DrugDataset.default_qsets[keyword].order_by('-approval_date').values(*ddset.view_colnames)
+=======
+        qset = DrugDataset.default_queryset.order_by('-approval_date').values(*ddset.view_colnames)
+>>>>>>> f20740707559ad5b8efd463c3edd03cf8b6e660c
     else:
         qcols = {k:''.join(v) for k,v in qcols.items()}
         print("qcols IN DrugsList:", qcols)
