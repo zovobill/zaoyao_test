@@ -26,7 +26,7 @@ class FrontEChartsTemplate(EChartsFrontView):
         if '' != keyword:
             chartdatas, qwords, columns = ddset.get_datasets_by_dict(cur_keyword = keyword)
         else:
-            qcols = {k:''.join(v) for k,v in qcols.items()}
+            qcols = {k:''.join(qcols[k]) for i,k in enumerate(qcols.keys()) if i < DrugDataset.MAX_KEYWORD_NUM}
             logger.debug("qcols:", qcols)            
             chartdatas, qwords, columns = ddset.get_datasets_by_dict(**qcols)
         charts = {}

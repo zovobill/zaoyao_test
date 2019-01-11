@@ -6,6 +6,7 @@ from copy import deepcopy
 
 class DrugDataset(object):
 	"""generate dataset for creating echarts"""
+	MAX_KEYWORD_NUM = 3
 	colnames = ['drug_name_zh', 'production_unit__production_unit_name', 'drug_name_en', 'drug_approval_num']
 	view_colnames = ['drug_index', 'drug_approval_num', 'drug_name_zh', 'drug_name_en', 'drug_form','drug_spec', 'production_unit__production_unit_name','production_unit__province', 'approval_date']
 	date_columns = ['approval_date']
@@ -18,11 +19,11 @@ class DrugDataset(object):
 	# 'drug_name_zh'+one_ending:['drug_spec', 'production_unit__production_unit_name', 'approval_date'],
 	# 'drug_name_zh'+many_ending:['drug_name_zh', 'category', 'drug_spec', 'production_unit__production_unit_name', 'approval_date'],
 	'production_unit__production_unit_name'+one_ending:['approval_date','drug_form'],
-	'production_unit__production_unit_name'+many_ending:['approval_date', 'drug_form', 'production_unit__production_unit_name'],
+	'production_unit__production_unit_name'+many_ending:['approval_date', 'drug_form', 'production_unit__province'],
 	'drug_approval_num'+one_ending:['approval_date','drug_form'],
 	'drug_approval_num'+many_ending:['approval_date', 'drug_form', 'production_unit__production_unit_name'],
 	'drug_name_en'+one_ending:['approval_date','drug_form'],
-	'drug_name_en'+many_ending:['approval_date', 'drug_form', 'production_unit__production_unit_name'],
+	'drug_name_en'+many_ending:['approval_date', 'drug_form', 'production_unit__province'],
 	}
 	chartbyids = {
 	'drug_name_zh':'按药品名称',

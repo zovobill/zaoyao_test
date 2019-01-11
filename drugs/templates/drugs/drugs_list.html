@@ -24,11 +24,13 @@
       </tbody>
     </table>
 </div>
+<div class="row">
+  <div class="col-md-4"></div>
 <div class="pagination">
     <span class="step-links">
         {% if drugs_list_page.has_previous %}
-            <a href="javascript:loadpage(qcols, 1)">&laquo; 首页</a>
-            <a href="javascript:loadpage(qcols, {{ drugs_list_page.previous_page_number }})">上一页</a>
+            <a class="btn btn-primary" href="javascript:loadpage(qcols, 1)">首页</a>
+            <a class="btn btn-primary" href="javascript:loadpage(qcols, {{ drugs_list_page.previous_page_number }})">上一页</a>
         {% endif %}
 
         <span class="current">
@@ -36,8 +38,9 @@
         </span>
 
         {% if drugs_list_page.has_next %}
-            <a href="javascript:loadpage(qcols, {{ drugs_list_page.next_page_number }})">下一页</a>
-            <a href="javascript:loadpage(qcols, {{ drugs_list_page.paginator.num_pages }})">末页 &raquo;</a>
+            <a class="btn btn-primary" href="javascript:loadpage(qcols, {{ drugs_list_page.next_page_number }})">下一页</a>
+            <a class="btn btn-primary" href="javascript:loadpage(qcols, {{ drugs_list_page.paginator.num_pages }})">末页</a>
         {% endif %}
     </span>
+</div>
 </div>

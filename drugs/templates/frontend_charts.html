@@ -10,23 +10,28 @@
         </div>
         {% include 'drugs/search.html' %}
         <!--/.sidebar-offcanvas-->
-        <div class="col-xs-12 col-sm-10 col-md-offset-1" >
-
-            <div class="alert alert-info" role="alert">
-                {% include 'drugs/join.html' %}
+        {% if success %}
+            <div id="qid" class="alert alert-info col-md-6 col-md-offset-3" role="alert" style="display:none;" data-q="{{q}}"></div>
+            <div class="col-xs-12 col-sm-10 col-md-offset-1">
+                <div class="alert alert-success" role="alert" style="margin: 5px;">
+                    {% include 'drugs/join.html' %}
+                </div>
+                <ul class="nav nav-tabs nav-justified row" style="margin: 5px;">
+                    <li id="list_li" role="presentation" class="active"><a href="javascript:">列表</a></li>
+                    <li id="chart_li" role="presentation" class=""><a href="javascript:">图表（限选三项）</a></li>
+                </ul>
+                <div id="drugs_list" style="margin: 5px;">
+                    {% include 'drugs/drugs_list.html' %}
+                </div>
+                <div id="echarts_group" style="display: none;"></div>
             </div>
-            <ul class="nav nav-tabs nav-justified">
-                <li id="list_li" role="presentation" class="active"><a href="javascript:">列表</a></li>
-                <li id="chart_li" role="presentation" class=""><a href="javascript:">图表</a></li>
-            </ul>
-            <div id="drugs_list">
-                {% include 'drugs/drugs_list.html' %}
-            </div>
-            <div id="echarts_group" style="display: none;">
-                <div id="id_echarts_one" style="height: 400px;margin: 10px;"></div>
-                <div id="id_echarts_two" style="height: 400px;margin: 10px;"></div>
+        {% else %}
+        <div class="col-xs-12 col-sm-10 col-md-offset-1">
+            <div id="qid" class="alert alert-info" role="alert" data-q="{{q}}" style="margin: 10px;">
+                关键词：“{{ q }}”，无结果
             </div>
         </div>
+        {% endif %}
         <!--/.col-xs-12.col-sm-9-->
     </div>
 {% endblock %}
@@ -89,7 +94,7 @@
             });
         });
 
-        var mChart, mChart2;
+        var mChart;
         function loadcharts(qcols){
             if(Object.keys(qcols).length == 0){
                 // $("#checkall").click();
@@ -102,29 +107,27 @@
         function loadEcharts(qcols) {
             
             var url = '/drugs/options/';
+            $("#echarts_group").empty();
+            $("#echarts_group").append($('<div id="id_echarts_one" style="height: 500px;margin: 10px;"></div>'));
             if (mChart != null) {
                 mChart.clear();
             }
             mChart = echarts.init(document.getElementById("id_echarts_one"));
             mChart.showLoading(opts={text:"加载中"});
-            if (mChart2 != null) {
-                mChart2.clear();
-            }
-            mChart2 = echarts.init(document.getElementById("id_echarts_two"));
-            mChart2.showLoading();
             $.ajax({
                 url: url,
                 type: "POST",
                 data: qcols,
                 dataType: "json",
             }).done(function (data) {
-                // data = JSON.parse(data);
-                mChart.hideLoading();
-                mChart.setOption($.parseJSON(data[1]));
-                mChart2.hideLoading();
-                mChart2.setOption($.parseJSON(data[2]));
-                console.log(data);
-                
+                $("#id_echarts_one").hide();
+                for(var chartid in data){
+                    var cid = 'chartid_'+chartid;
+                    var achart = '<div id='+cid+' style="height: 500px;margin: 10px;"></div>';
+                    $('#echarts_group').append(achart);
+                    var c = echarts.init(document.getElementById(cid));
+                    c.setOption($.parseJSON(data[chartid]));
+                }                
             });
             chart_is_changed=false;
         }
@@ -154,13 +157,10 @@
                 $('#drugs_list').empty();
                 // data.content need decode() for json to response
                 // $('#drugs_list').append(data.content);
-
                 $('#drugs_list').append(data.drugs);
                 
             });
-            // list_is_changed=false;
         }
-
 
         $(document).ready(function () {
             $('button.btn.btn-primary.postajax').each(function () {

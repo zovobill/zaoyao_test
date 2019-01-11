@@ -87,11 +87,12 @@ def fronthome(request):
         return redirect('index')
     datasets = {}
     querys, cur_word, qset = ddset.get_query_names(keyword)
-    if querys == {}: return render_to_response('frontend_charts.html')
+    if querys == {}:
+    	return render_to_response('frontend_charts.html', {'q':keyword, 'success':False})
     qset = qset.order_by('-approval_date').values(*ddset.view_colnames)
     paginator = Paginator(qset, 20)
     qset_page = paginator.get_page(1)
-    datasets={'querys':querys, 'q':keyword, 'drugs_list_page':qset_page}
+    datasets={'success':True, 'querys':querys, 'q':keyword, 'drugs_list_page':qset_page}
     return render_to_response('frontend_charts.html', datasets)
 
 # def drugslist(request):
