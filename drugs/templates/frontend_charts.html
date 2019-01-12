@@ -3,27 +3,25 @@
 {% block main_content %}
     
     <div class="row row-offcanvas row-offcanvas-right">
-        <div class="col-xs-6 col-sm-2 sidebar-offcanvas" id="sidebar">
-            <div class="list-group">
-                
-            </div>
-        </div>
         {% include 'drugs/search.html' %}
         <!--/.sidebar-offcanvas-->
         {% if success %}
-            <div id="qid" class="alert alert-info col-md-6 col-md-offset-3" role="alert" style="display:none;" data-q="{{q}}"></div>
+            <div id="qid" style="display:none;" data-q="{{q}}"></div>
             <div class="col-xs-12 col-sm-10 col-md-offset-1">
-                <div class="alert alert-success" role="alert" style="margin: 5px;">
+                <div class="alert alert-success" role="alert" style="margin: 10px;">
                     {% include 'drugs/join.html' %}
                 </div>
-                <ul class="nav nav-tabs nav-justified row" style="margin: 5px;">
+                <div style="margin: 0px -5px 0px 10px;">
+                <ul class="nav nav-tabs nav-justified col-xs-12 col-sm-12 col-md-12">
                     <li id="list_li" role="presentation" class="active"><a href="javascript:">列表</a></li>
                     <li id="chart_li" role="presentation" class=""><a href="javascript:">图表（限选三项）</a></li>
                 </ul>
-                <div id="drugs_list" style="margin: 5px;">
+                </div>
+                <hr>
+                <div id="drugs_list" style="margin: 10px;">
                     {% include 'drugs/drugs_list.html' %}
                 </div>
-                <div id="echarts_group" style="display: none;"></div>
+                <div id="echarts_group" class="col-xs-12 col-sm-12 col-md-12" style="display: none;"></div>
             </div>
         {% else %}
         <div class="col-xs-12 col-sm-10 col-md-offset-1">

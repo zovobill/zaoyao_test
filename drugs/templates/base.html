@@ -25,7 +25,7 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="/">
-                <img src="{% static 'drugs/images/sitelogo.jpg' %}" style="height:30px;display:inline;">&nbsp;找药网Zhaoyao</a>
+                <img src="{% static 'drugs/images/sitelogo.jpg' %}" style="height:25px;display:inline;">&nbsp;找药网Zhaoyao</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -39,9 +39,12 @@
     </div><!-- /.container-fluid -->
 </nav>
   
-<div class="container">
-    <div class="col-md-3 col-md-offset-5">
-        <a href="/"><img src="{% static 'drugs/images/sitelogo.jpg' %}" alt="Logo"></a>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-4 col-sm-4 col-md-5"></div>
+        <div class="col-xs-3 col-sm-3 col-md-3">
+            <a href="/"><img src="{% static 'drugs/images/sitelogo.jpg' %}" alt="Logo"></a>
+        </div>
     </div>
     {% block search_form %}{% endblock %}
     {% block main_content %}{% endblock %}
@@ -53,13 +56,8 @@
 {% else %}
     <footer class="navbar-fixed-bottom">
 {% endif %}
-        <hr>    
-        <div class="row">
-            <div class="col-md-5"></div>
-            <div class="col-md-4">
-                <p>&copy; 2018-2019, Powered by Blackdoor</p>
-            </div>
-        </div>
+    <hr>
+    <center><p>&copy; 2018-2019, Powered by Blackdoor</p></center>
     </footer>
 <!--/.container-->
 {% block include_script %}

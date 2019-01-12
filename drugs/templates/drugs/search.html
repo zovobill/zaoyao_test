@@ -1,8 +1,10 @@
 
 
-    <div class="col-md-6 col-md-offset-3">
-		<form action="/drugs/search/" class="search form-inline" role="search" style="margin: 10px;">		
-		  	<input  id="query" type="text" class="form-control col-md-9" data-toggle="tooltip" title="关键词之间分隔，空格为与，逗号为或" placement="top" name='q' style="width: 380px" placeholder="药品名称或企业名称或批准文号">
-		  	<button type="submit" class="btn btn-primary col-md-3">搜索</button>
+    <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
+		<form action="/drugs/search/" class="search form-inline" role="search" style="margin: 10px;">	
+			<div class="controls">
+			  	<input  id="query" type="text" class="form-control col-xs-6 col-md-9 col-lg-9" style="width: 75%;" data-toggle="tooltip" title="关键词之间分隔，空格为与，逗号为或" placement="top" name='q' placeholder="药品名称或企业名称或批准文号"></input>
+			  	<button type="submit" class="btn btn-primary form-control col-xs-3 col-md-3 col-lg-3" style="width: 25%;">搜&nbsp;&nbsp;&nbsp;&nbsp;索</button>
+			</div>
 		</form>
     </div>

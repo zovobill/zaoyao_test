@@ -6,3 +6,18 @@ Not Found: /favicon.ico
 Not Found: /favicon.ico
 "GET /favicon.ico HTTP/1.1" 404 2072
 "GET /favicon.ico HTTP/1.1" 500 59
+"GET /static/drugs/images/sitelogo.jpg HTTP/1.1" 500 59
+Not Found: /favicon.ico
+"GET /favicon.ico HTTP/1.1" 404 2072
+"GET /favicon.ico HTTP/1.1" 500 59
+"GET /drugs/search/?q=ghjk HTTP/1.1" 500 59
+Not Found: /favicon.ico
+"GET /favicon.ico HTTP/1.1" 404 2072
+"GET /favicon.ico HTTP/1.1" 500 59
+Not Found: /favicon.ico
+"GET /favicon.ico HTTP/1.1" 404 2076
+"POST /drugs/list/1/ HTTP/1.1" 500 59
+Not Found: /favicon.ico
+"GET /favicon.ico HTTP/1.1" 404 2076
+Not Found: /favicon.ico
+"GET /favicon.ico HTTP/1.1" 404 2076

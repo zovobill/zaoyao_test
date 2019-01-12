@@ -25,7 +25,7 @@
     </table>
 </div>
 <div class="row">
-  <div class="col-md-4"></div>
+<div class="col-xs-3 col-sm-4 col-md-4"></div>
 <div class="pagination">
     <span class="step-links">
         {% if drugs_list_page.has_previous %}
@@ -34,7 +34,7 @@
         {% endif %}
 
         <span class="current">
-            第<code>{{ drugs_list_page.number }}</code>页，共<code>{{ drugs_list_page.paginator.num_pages }}</code>页
+            <code>{{ drugs_list_page.number }}</code> / <code>{{ drugs_list_page.paginator.num_pages }}</code>
         </span>
 
         {% if drugs_list_page.has_next %}
