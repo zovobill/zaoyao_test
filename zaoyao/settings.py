@@ -25,7 +25,7 @@ SECRET_KEY = 'trpg_(%p!msr$xvdb-*cl^2m@&bao_2%*d7xn39@la-r7z9+-3'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -88,6 +88,8 @@ DATABASES = {
     'default': {
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'HOST':'127.0.0.1',
+        'PORT':'3306',
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'cfda_drugs',
         'USER': 'root',
@@ -158,8 +160,10 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
-
+# resoure of every app's static files
 STATIC_URL = '/static/'
+# collect and storage staticfiles in a new directory
+STATIC_ROOT = '/home/wwwroot/zaoyao_test/static/'
 
 CACHES = {
     'default': {

@@ -87,8 +87,12 @@ def fronthome(request):
         return redirect('index')
     datasets = {}
     querys, cur_word, qset = ddset.get_query_names(keyword)
+
+    if qset == DrugDataset.TOO_LARGE_QSET:
+        return render_to_response('frontend_charts.html', {'q':keyword, 'success':False, 'message':'查询超时，请输入更精准关键词'})
     if querys == {}:
-    	return render_to_response('frontend_charts.html', {'q':keyword, 'success':False})
+        return render_to_response('frontend_charts.html', {'q':keyword, 'success':False, 'message':'查询无结果，或查询超时，请输入更精准关键词'})
+
     qset = qset.order_by('-approval_date').values(*ddset.view_colnames)
     paginator = Paginator(qset, 20)
     qset_page = paginator.get_page(1)

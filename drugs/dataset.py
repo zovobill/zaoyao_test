@@ -7,6 +7,8 @@ from copy import deepcopy
 class DrugDataset(object):
 	"""generate dataset for creating echarts"""
 	MAX_KEYWORD_NUM = 3
+	TOO_LARGE_QSET = 50000
+	EXCEPT_KEYWORDS = ['国药准字Z2','国药准字H2','国药准字S2','有限公司','199','200','201', '02', '03', '04']
 	colnames = ['drug_name_zh', 'production_unit__production_unit_name', 'drug_name_en', 'drug_approval_num']
 	view_colnames = ['drug_index', 'drug_approval_num', 'drug_name_zh', 'drug_name_en', 'drug_form','drug_spec', 'production_unit__production_unit_name','production_unit__province', 'approval_date']
 	date_columns = ['approval_date']
@@ -55,9 +57,18 @@ class DrugDataset(object):
 				else:
 					self.is_by_and = True
 				break
+		def except_word(kword):
+			if kword == '': return False
+			kword = kword.upper()
+			for ewords in DrugDataset.EXCEPT_KEYWORDS:
+				if kword in ewords:
+					return False
+			return True
 		#drop the space char of list
-		kwords = list(filter(None, kwords))
+		kwords = list(filter(except_word, kwords))
 		return kwords or []
+
+
 
 	def _get_query_columns(self, kwords):
 		# find out the relative columns of kwords
@@ -231,6 +242,7 @@ class DrugDataset(object):
 		qset, qwords, columns = self.get_queryset(keyword, is_exact)
 		print('qset type:{}'.format(type(qset)))
 		if len(qset) == 0: return {}, keyword, []
+		if len(qset) > DrugDataset.TOO_LARGE_QSET: return {}, keyword, DrugDataset.TOO_LARGE_QSET
 		DrugDataset.default_qsets[self.keyword] = qset
 		querys_dict, cur_words = self._get_query_names_by_cols(qset, qwords, columns)
 		return querys_dict, cur_words, qset

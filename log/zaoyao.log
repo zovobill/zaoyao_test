@@ -1,0 +1,8 @@
+Not Found: /favicon.ico
+"GET /favicon.ico HTTP/1.1" 404 2072
+"GET /favicon.ico HTTP/1.1" 500 59
+"GET /static/drugs/images/sitelogo.jpg HTTP/1.1" 500 59
+"GET /drugs/search/?q=%E5%85%AC%E5%8F%B8 HTTP/1.1" 500 59
+Not Found: /favicon.ico
+"GET /favicon.ico HTTP/1.1" 404 2072
+"GET /favicon.ico HTTP/1.1" 500 59
